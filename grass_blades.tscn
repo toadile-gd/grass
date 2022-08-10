@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://grass_mat.tres" type="Material" id=1]
+[ext_resource path="res://grass_blade.obj" type="ArrayMesh" id=2]
+
+[node name="MeshInstance" type="MeshInstance"]
+material_override = ExtResource( 1 )
+mesh = ExtResource( 2 )
+material/0 = null

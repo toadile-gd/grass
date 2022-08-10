@@ -1,0 +1,41 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=2]
+
+[ext_resource path="res://g_a.png" type="Texture" id=1]
+[ext_resource path="res://grass.tres" type="Shader" id=2]
+
+[sub_resource type="OpenSimplexNoise" id=3]
+
+[sub_resource type="NoiseTexture" id=2]
+bump_strength = 24.7
+noise = SubResource( 3 )
+
+[resource]
+shader = ExtResource( 2 )
+shader_param/y_offset = 0.5
+shader_param/base_color = Color( 0.0666667, 0.380392, 0.0705882, 1 )
+shader_param/end_color = Color( 0.14902, 1, 0, 1 )
+shader_param/specular = 0.1
+shader_param/metallic = 0.0
+shader_param/roughness = 1.0
+shader_param/rim = 0.01
+shader_param/transmission = 0.5
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/uv_offset = Vector2( 0, 0 )
+shader_param/wind_noise_scale = 0.2
+shader_param/wind_direction = Vector2( 0, 1 )
+shader_param/wind_speed = 1.0
+shader_param/wind_strength = 1.0
+shader_param/color_variatiion = 0.5
+shader_param/height = 1.0
+shader_param/height_variation = 0.3
+shader_param/flatness = 0.2
+shader_param/fade_out_distance = 30.0
+shader_param/fade_out_transition = 20.0
+shader_param/y_billboard = false
+shader_param/displace_intensity = 1.0
+shader_param/proximity_distance = 1.0
+shader_param/displace = true
+shader_param/alpha_scissors = 0.9
+shader_param/use_normal_map_alpha = false
+shader_param/texture_albedo = ExtResource( 1 )
+shader_param/texture_wind_noise = SubResource( 2 )
