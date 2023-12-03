@@ -1,7 +1,10 @@
-[gd_resource type="Shader" format=2]
+[gd_resource type="Shader" format=3 uid="uid://u6woqo6vfjq2"]
 
 [resource]
-code = "/** A grass shader by Toadile for Godot 3.x
+code = "/**
+ * A grass shader by Toadile for Godot 3.x
+ * Converted by RomanRobot to Godot 4.x
+ *
  * Copies, modififications, and redistrubitions are allowed and encouranged.
  * For best effect, make sure that the quad/geometry is twice the width that is 
  * normal. In most cases, a quad that is 2 by 1 will be sufficient for the grass
@@ -13,20 +16,22 @@ code = "/** A grass shader by Toadile for Godot 3.x
  */
 
 shader_type spatial;
-render_mode blend_mix, cull_disabled, depth_draw_opaque;
+render_mode blend_mix, cull_disabled;
+
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
 
 // general parameters
 uniform float y_offset = 0.5;
-uniform vec4 base_color : hint_color = vec4(1.0);
-uniform vec4 end_color : hint_color = vec4(1.0);
+uniform vec4 base_color : source_color = vec4(1.0);
+uniform vec4 end_color : source_color = vec4(1.0);
 uniform float specular: hint_range(0,1) = 0.1;
 uniform float metallic: hint_range(0,1) = 0.0;
 uniform float roughness : hint_range(0,1) = 1.0;
 uniform float rim: hint_range(0,1) = 0.01;
 uniform float transmission: hint_range(0,1) = 0.5;
-uniform sampler2D texture_albedo : hint_albedo;
-uniform sampler2D texture_normal : hint_normal;
-uniform sampler2D texture_wind_noise : hint_albedo;
+uniform sampler2D texture_albedo : source_color, repeat_disable;
+uniform sampler2D texture_normal : hint_normal, repeat_disable;
+uniform sampler2D texture_wind_noise : source_color, repeat_enable;
 uniform vec2 uv_scale = vec2(1.0,1.0);
 uniform vec2 uv_offset = vec2(0.0,0.0);
 
@@ -70,27 +75,27 @@ void vertex() {
 	float h_stiff = 1.0/inv_h_stiff;
 	
 	// wind noise animation
-	vec2 world_xy = (WORLD_MATRIX * vec4(VERTEX, 1.0)).xz*0.2*wind_noise_scale + wind_direction*TIME*wind_speed*0.51*h_stiff;
+	vec2 world_xy = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xz*0.2*wind_noise_scale + wind_direction*TIME*wind_speed*0.51*h_stiff;
 	vec4 noise_tex = texture(texture_wind_noise, world_xy);
 	
 	// y billboard adjustment
 	if (y_billboard)
 	{
-		MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(
-			vec4(normalize(cross(vec3(0.0, 1.0, 0.0), CAMERA_MATRIX[2].xyz)),0.0),
+		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(
+			vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)),0.0),
 			vec4(0.0, 1.0, 0.0, 0.0),
-			vec4(normalize(cross(CAMERA_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))),0.0),
-			WORLD_MATRIX[3]);
+			vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))),0.0),
+			MODEL_MATRIX[3]);
 	}
 	
 	// animate the grass
 	vec4 local_wind_direction;
 	if (y_billboard)
 	{
-		local_wind_direction = vec4(wind_direction.x, 1.0, wind_direction.y, 0.0)*CAMERA_MATRIX;
+		local_wind_direction = vec4(wind_direction.x, 1.0, wind_direction.y, 0.0)*INV_VIEW_MATRIX;
 	} else
 	{
-		local_wind_direction = vec4(wind_direction.x, 1.0, wind_direction.y, 0.0)*WORLD_MATRIX;
+		local_wind_direction = vec4(wind_direction.x, 1.0, wind_direction.y, 0.0)*MODEL_MATRIX;
 	}
 	float flat_x = sin(MODELVIEW_MATRIX[2].x)*flatness*h_stiff;
 	float flat_y = cos(MODELVIEW_MATRIX[2].z)*flatness*h_stiff;
@@ -132,10 +137,9 @@ void fragment() {
 	if (displace)
 	{
 		float depth_tex = textureLod(DEPTH_TEXTURE,SCREEN_UV,0.0).r;
-		vec4 world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV*2.0-1.0,depth_tex*2.0-1.0,1.0);
-		world_pos.xyz/=world_pos.w;
-		float stuff = clamp(1.0-smoothstep(world_pos.z+0.5,world_pos.z,VERTEX.z), 0.3, 1.1);
-		prox = clamp(1.0-smoothstep(world_pos.z+proximity_distance,world_pos.z,VERTEX.z) + UV.y*proximity_distance,0.0,1.0);
+		vec4 view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV*2.0-1.0,depth_tex,1.0);
+		float linear_depth = view.z / view.w;
+		prox = clamp(1.0-smoothstep(linear_depth+proximity_distance,linear_depth,VERTEX.z) + UV.y*proximity_distance,0.0,1.0);
 		base_uv.x += (1.0-prox)*0.2*displace_intensity * bend_uv_direction;
 		base_uv.y -= (1.0-prox)*0.5*displace_intensity;
 	}
@@ -146,11 +150,9 @@ void fragment() {
 	if (!use_normal_map_alpha && albedo_tex.a < alpha_scissors)
 	{
 		discard;
-		return;
 	} else if (use_normal_map_alpha && normal_tex.a < alpha_scissors)
 	{
 		discard;
-		return;
 	}
 	
 	ALBEDO = COLOR.rgb * albedo_tex.rgb * (1.0 + instance_offset) * prox;
@@ -158,6 +160,6 @@ void fragment() {
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
 	RIM = rim;
-	TRANSMISSION = vec3(transmission);
-	NORMALMAP = normal_tex.rgb;
+	BACKLIGHT = vec3(transmission);
+	NORMAL_MAP = normal_tex.rgb;
 }"

@@ -1,30 +1,22 @@
-[gd_resource type="Environment" load_steps=2 format=2]
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://rdeb1idn1by5"]
 
-[sub_resource type="ProceduralSky" id=11]
-sky_top_color = Color( 0.0666667, 0.258824, 0.372549, 1 )
-sky_horizon_color = Color( 0.717647, 0.380392, 0.27451, 1 )
-ground_bottom_color = Color( 0.152941, 0.12549, 0.0705882, 1 )
-ground_horizon_color = Color( 0.717647, 0.380392, 0.27451, 1 )
-ground_curve = 0.0400001
-sun_color = Color( 0.827451, 0.678431, 0.443137, 1 )
-sun_angle_min = 0.0
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2v7k6"]
+sky_top_color = Color(0.0666667, 0.258824, 0.372549, 1)
+sky_horizon_color = Color(0.717647, 0.380392, 0.27451, 1)
+sky_curve = 0.09
+ground_bottom_color = Color(0.152941, 0.12549, 0.0705882, 1)
+ground_horizon_color = Color(0.717647, 0.380392, 0.27451, 1)
+ground_curve = 0.04
+
+[sub_resource type="Sky" id="11"]
+sky_material = SubResource("ProceduralSkyMaterial_2v7k6")
 
 [resource]
 background_mode = 2
-background_sky = SubResource( 11 )
-fog_color = Color( 0.819608, 0.47451, 0.345098, 1 )
-fog_depth_begin = 0.0
+sky = SubResource("11")
 tonemap_mode = 4
-auto_exposure_min_luma = 0.1
-auto_exposure_max_luma = 1.0
 ssao_radius = 2.0
-ssao_intensity = 2.0
-ssao_intensity2 = 2.0
 ssao_light_affect = 0.39
-ssao_quality = 2
-ssao_edge_sharpness = 9.28
-dof_blur_far_distance = 50.0
-dof_blur_far_transition = 20.0
 glow_hdr_threshold = 0.8
 adjustment_brightness = 0.96
 adjustment_contrast = 1.1
