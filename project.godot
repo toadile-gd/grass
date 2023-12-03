@@ -6,12 +6,13 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
 [application]
 
 config/name="grass"
 run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.2")
 config/icon="res://icon.png"
 
 [debug]
@@ -20,7 +21,7 @@ settings/stdout/print_fps=true
 
 [display]
 
-window/vsync/use_vsync=false
+window/vsync/vsync_mode=false
 
 [gui]
 
@@ -32,5 +33,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/defaults/default_environment="res://default_env.tres"
 quality/filters/msaa=2
-environment/default_environment="res://default_env.tres"

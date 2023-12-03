@@ -1,20 +1,21 @@
 [remap]
 
 importer="wavefront_obj"
+importer_version=1
 type="Mesh"
-path="res://.import/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh"
+uid="uid://d0m16s8yq7c6x"
+path="res://.godot/imported/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh"
 
 [deps]
 
-files=[ "res://.import/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh" ]
+files=["res://.godot/imported/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh"]
 
 source_file="res://grass_blade.obj"
-dest_files=[ "res://.import/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh", "res://.import/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh" ]
+dest_files=["res://.godot/imported/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh", "res://.godot/imported/grass_blade.obj-9a9479a89cf89200a815257656ca8d11.mesh"]
 
 [params]
 
 generate_tangents=true
-scale_mesh=Vector3( 1, 1, 1 )
-offset_mesh=Vector3( 0, 0, 0 )
-octahedral_compression=true
-optimize_mesh_flags=4286
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

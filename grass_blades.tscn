@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://yjkeox1aynrx"]
 
-[ext_resource path="res://grass_mat.tres" type="Material" id=1]
-[ext_resource path="res://grass_blade.obj" type="ArrayMesh" id=2]
+[ext_resource type="Material" uid="uid://cjn80l82eyw15" path="res://grass_mat.tres" id="1"]
+[ext_resource type="ArrayMesh" uid="uid://d0m16s8yq7c6x" path="res://grass_blade.obj" id="2"]
 
-[node name="MeshInstance" type="MeshInstance"]
-material_override = ExtResource( 1 )
-mesh = ExtResource( 2 )
-material/0 = null
+[node name="MeshInstance3D" type="MeshInstance3D"]
+material_override = ExtResource("1")
+mesh = ExtResource("2")
